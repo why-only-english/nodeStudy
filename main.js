@@ -1,3 +1,4 @@
 const mathTool = require('./math-tools.js');
 
-console.log(mathTxool.getFactorial(5));
+
+console.log(mathTool.getFactorial(5));
