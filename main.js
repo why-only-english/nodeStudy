@@ -1,3 +1,3 @@
-const os = require('os');
+const mathTool = require('./math-tools.js');
 
-console.log(os.cpus());
+console.log(mathTxool.getFactorial(5));
