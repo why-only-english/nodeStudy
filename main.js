@@ -1,18 +1,13 @@
-const fs = require('fs');
+// events 코어 모듈
+const EvenEmitter = require('events');
 
-// console.log('Start');
+// EvenEmitter 클래스로 myEmitter 객체 생성
+const myEmitter = new EvenEmitter;
 
-// 동기 실행 함수
-// let content = fs.readFileSync('./new', 'utf8');
-// console.log(content);
-
-// console.log('Finish');
-
-console.log('Start');
-
-// 비동기 실행 함수
-fs.readFile('./new', 'utf8', (error, data) => {
-    console.log(data);
+// on 메소드 호출, 이벤트 발생했을때 실행할 콜백 등록
+myEmitter.on('test', () => {
+    console.log('Success!');
 })
 
-console.log('Finish');
+// emit 메소드 호출, 발생시킬 이벤트
+myEmitter.emit('test');
