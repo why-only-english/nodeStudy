@@ -1,17 +1,27 @@
-const http = require("http");
+const http = require('http');
 
-let members = ['moon', 'jung', 'kim', 'park'];
+const express = require('express'); 
 
-let server = http.createServer(function (request, response) {
-    
-    if(request.url === '/') {
-        response.end('<h1>Welcome!</h1>');
-    } else if(request.url === '/members') {
-        response.end('<h1>' + members + '</h1>');
-    } else {
-        response.end('<h1>404</h1>');
-    }
-    
+const app = express();
+
+const users = ['Tom', 'Andy', 'Jessica', 'Paul']; 
+
+app.get('/', (request, response) => {
+    response.end('<h1>Welcome!</h1>');
 });
 
-server.listen(3000);
+app.get('/users', (request, response) => {
+    response.end(`<h1>${users}</h1>`);
+});
+
+app.get('/users/:id', (request, response) => {
+    // console.log(request.params);  // split 메소드를 사용하지 않아도 됨
+    const usersName = users[request.params.id - 1];
+    response.end(`<h1>${usersName}</h1>`);
+});
+
+app.get('*', (request, response) => {
+    response.end('<h1>404</h1>');
+});
+
+app.listen(3000);
