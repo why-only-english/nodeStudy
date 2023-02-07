@@ -1,6 +1,17 @@
-let url = new URL('https://www.coupang.com/vp/products/110118399?itemId=332311030&vendorItemId=3815875164&sourceType=CAMPAIGN&campaignId=82&categoryId=317677&isAddedCart=')
+const http = require("http");
 
-console.log(url.protocol);
-console.log(url.host);
-console.log(url.pathname);
-console.log(url.search);     // 쿼리 부분
+let members = ['moon', 'jung', 'kim', 'park'];
+
+let server = http.createServer(function (request, response) {
+    
+    if(request.url === '/') {
+        response.end('<h1>Welcome!</h1>');
+    } else if(request.url === '/members') {
+        response.end('<h1>' + members + '</h1>');
+    } else {
+        response.end('<h1>404</h1>');
+    }
+    
+});
+
+server.listen(3000);
