@@ -6,6 +6,10 @@ const app = express();
 let members = require('./members');
 
 app.use(express.json());  // middleware
+app.use((req,res, next) => {
+    console.log(req.query);
+    next();
+  });
 
 app.get('/api/members', (req, res) => {
     const { team } = req.query;
@@ -25,7 +29,7 @@ app.get('/api/members/:id', (req, res) => {
     if (member) {
         res.send(member);
     } else {
-        res.status(404).send({message : 'There is no such member'});
+        res.status(404).send({message : 'There is no member with the id!'});
     }
 });
 
@@ -33,6 +37,20 @@ app.post('/api/members', (req, res) => {
     const newMember = req.body;   // POST 리퀘스트에선 body가 필요
     members.push(newMember);
     res.send(newMember);
+});
+
+app.put('/api/members/:id', (req, res) => {
+    const { id } = req.params;
+    const newInfo = req.body;
+    const member = members.find((m) => m.id === Number(id));
+    if(member) {
+        Object.keys(newInfo).forEach((prop) => {
+            member[prop] = newInfo[prop];
+        });
+        res.send(member);
+    } else {
+        res.status(404).send({ message : 'There is no member with the id!'});
+    }
 });
 
 app.listen(3000, () => {
