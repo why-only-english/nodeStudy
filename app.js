@@ -3,8 +3,21 @@ const express = require('express');
 // 관습적으로 객체 app이라고 부름
 const app = express();
 
-app.get('/hello', (req, res) => {
-    res.send('<h1>Hello Express<h1>');
+let members = require('./members');
+
+app.get('/api/members', (req, res) => {
+    res.send(members);
+});
+
+app.get('/api/members/:id', (req, res) => {
+    // const id = req.params.id;
+    const { id } = req.params;
+    const member = members.find((m) => m.id === Number(id));
+    if (member) {
+        res.send(member);
+    } else {
+        res.status(404).send({message : 'There is no such member'});
+    }
 });
 
 app.listen(3000, () => {
