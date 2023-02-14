@@ -5,6 +5,8 @@ const app = express();
 
 let members = require('./members');
 
+app.use(express.json());  // middleware
+
 app.get('/api/members', (req, res) => {
     const { team } = req.query;
     // url에 team이 존재한다면 특정 팀만 조회
@@ -25,6 +27,12 @@ app.get('/api/members/:id', (req, res) => {
     } else {
         res.status(404).send({message : 'There is no such member'});
     }
+});
+
+app.post('/api/members', (req, res) => {
+    const newMember = req.body;   // POST 리퀘스트에선 body가 필요
+    members.push(newMember);
+    res.send(newMember);
 });
 
 app.listen(3000, () => {
