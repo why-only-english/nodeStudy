@@ -6,7 +6,14 @@ const app = express();
 let members = require('./members');
 
 app.get('/api/members', (req, res) => {
-    res.send(members);
+    const { team } = req.query;
+    // url에 team이 존재한다면 특정 팀만 조회
+    if (team) {
+        const teamMembers = members.filter((m) => m.team === team);
+        res.send(teamMembers);
+    } else {
+        res.send(members);
+    }
 });
 
 app.get('/api/members/:id', (req, res) => {
