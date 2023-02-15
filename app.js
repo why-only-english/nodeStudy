@@ -3,7 +3,9 @@ const express = require('express');
 // 관습적으로 객체 app이라고 부름
 const app = express();
 
-let members = require('./members');
+const db = require('./models');
+
+const { Member } = db;
 
 app.use(express.json());  // middleware
 app.use((req,res, next) => {
@@ -11,13 +13,13 @@ app.use((req,res, next) => {
     next();
   });
 
-app.get('/api/members', (req, res) => {
+app.get('/api/members', async (req, res) => {
     const { team } = req.query;
-    // url에 team이 존재한다면 특정 팀만 조회
     if (team) {
-        const teamMembers = members.filter((m) => m.team === team);
+        const teamMembers = await Member.findAll({ where: { team }});
         res.send(teamMembers);
     } else {
+        const members = await Member.findAll();
         res.send(members);
     }
 });
