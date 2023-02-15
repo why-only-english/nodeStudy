@@ -53,6 +53,17 @@ app.put('/api/members/:id', (req, res) => {
     }
 });
 
+app.delete('/api/members/:id', (req,res) => {
+    const { id } = req.params;
+    const memberCount = members.length;
+    members = members.filter((member) => member.id !== Number(id));
+    if(members.length < memberCount) {
+        res.send({ message: 'Deleted'});
+    } else {
+        res.status(404).send({ message: 'There is no member with the id!'});
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server is listening...');  //  서버가 정상적으로 실행되는지 확인
 });   // 포트번호 3000
