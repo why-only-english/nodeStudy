@@ -24,10 +24,10 @@ app.get('/api/members', async (req, res) => {
     }
 });
 
-app.get('/api/members/:id', (req, res) => {
+app.get('/api/members/:id', async (req, res) => {
     // const id = req.params.id;
     const { id } = req.params;
-    const member = members.find((m) => m.id === Number(id));
+    const member = await Member.findOne({ where: { id }});  // 특정 직원 정보 조회
     if (member) {
         res.send(member);
     } else {
@@ -35,23 +35,36 @@ app.get('/api/members/:id', (req, res) => {
     }
 });
 
-app.post('/api/members', (req, res) => {
+app.post('/api/members', async(req, res) => {
     const newMember = req.body;   // POST 리퀘스트에선 body가 필요
-    members.push(newMember);
-    res.send(newMember);
+    const member = Member.build(newMember);
+    await member.save();
+    res.send(member);
 });
 
-app.put('/api/members/:id', (req, res) => {
+// app.put('/api/members/:id', (req, res) => {
+//     const { id } = req.params;
+//     const newInfo = req.body;
+//     const member = members.find((m) => m.id === Number(id));
+//     if(member) {
+//         Object.keys(newInfo).forEach((prop) => {
+//             member[prop] = newInfo[prop];
+//         });
+//         res.send(member);
+//     } else {
+//         res.status(404).send({ message : 'There is no member with the id!'});
+//     }
+// });
+
+// 기존 직원 정보 수정
+app.put('/api/members/:id', async (req, res) => {
     const { id } = req.params;
     const newInfo = req.body;
-    const member = members.find((m) => m.id === Number(id));
-    if(member) {
-        Object.keys(newInfo).forEach((prop) => {
-            member[prop] = newInfo[prop];
-        });
-        res.send(member);
+    const result = await Member.update(newInfo, { where: { id } });
+    if (result[0]) {
+        res.send({ message: `${result[0]} row(s) affected`});
     } else {
-        res.status(404).send({ message : 'There is no member with the id!'});
+        res.status(404).send({ message: 'There is no member with id!'});
     }
 });
 
